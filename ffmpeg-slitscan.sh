@@ -11,13 +11,15 @@ blend_mode=darken
 frame_count=1
 width=1920
 height=1080
-while getopts "i:o:h:w:" opt
+rate=30
+while getopts "i:o:h:w:r:" opt
 do
   case "$opt" in
     i ) input_file="$OPTARG" ;;
     o ) output_file="$OPTARG" ;;
     h ) height="$OPTARG" ;;
     w ) width="$OPTARG" ;;
+    r ) rate="$OPTARG" ;;
     ? ) helpFunction ;;
 
   esac
@@ -29,7 +31,7 @@ then
    helpFunction
 fi
 
-ffmpeg -i $input_file -f image2 -r 240 image-%4d.jpg
+ffmpeg -i $input_file -f image2 -r $rate image-%4d.jpg
 mogrify -crop 1x$(($height))+$(($width / 2))+0 image*.jpg
 montage image*.jpg -tile x1 -mode concatenate $output_file
 rm image*.jpg
